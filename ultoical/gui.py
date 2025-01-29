@@ -8,6 +8,11 @@ from ultoical.ical_handler import ICalHandler
 import zipfile
 
 class ULToICALInterface:
+  def login_with_password(self, username: str, password: str):
+    if self.handler.login_with_password(username, password):
+      gr.Info("Login successful / Connection reussie")
+    else:
+      gr.Warning("There was an error connecting into the account / Une erreur est apparu lors de la connexion")
   def login_with_token(self, token: str):
     self.handler.set_token(token)
 
@@ -38,22 +43,36 @@ class ULToICALInterface:
     self.handler = ULHandler()
     with gr.Blocks() as app:
       gr.Markdown("# ULToICAL")
-      gr.Markdown("## Log into your account using token (More info [here](https://github.com/totorocodesoften/ultoical/readme.md))")  # TODO change URL
-      with gr.Row(equal_height=True):
-        self.token = gr.Textbox(label="Your token", value="")
-        self.login_button = gr.Button("Login")
-      self.login_button.click(fn=self.login_with_token, inputs=[self.token])
+      with gr.Tab("Login using username and password / Connection via nom d'utilisateur et mot de passe"):
+        gr.Markdown(
+          "## Log into your account using your username and password")
+        gr.Markdown("Se connecter au compte en utilisant un nom d'utilisateur et un mot de passe")
+        with gr.Row(equal_height=True):
+          self.username = gr.Textbox(label="Your username / Nom d'utilisateur", value="")
+          self.password = gr.Textbox(label="Your password / Mot de passe", value="", type="password")
+          self.login_button = gr.Button("Login / Connexion")
+        self.login_button.click(fn=self.login_with_password, inputs=[self.username, self.password])
+      with gr.Tab("Login using token / Connection par jeton"):
+        gr.Markdown("## Log into your account using token (More info [here](https://github.com/totorocodesoften/ultoical/readme.md))")
+        gr.Markdown("Se connecter au compte en utilisant un jeton (Plus d'informations [ici](https://github.com/totorocodesoften/ultoical/readme.fr.md)")
+        with gr.Row(equal_height=True):
+          self.token = gr.Textbox(label="Your token / Votre jeton", value="")
+          self.login_button = gr.Button("Login / Connexion")
+        self.login_button.click(fn=self.login_with_token, inputs=[self.token])
       gr.Markdown("## Choose dates")
+      gr.Markdown("Choisissez les dates")
       with gr.Row(equal_height=True) as self.period:
         with gr.Column():
-          self.start = gr.DateTime(label="Start of the period", include_time=False)
+          self.start = gr.DateTime(label="Start of the period / Debut de la periode", include_time=False)
         with gr.Column():
-            self.end = gr.DateTime(label="End of the period", include_time=False)
-        self.get_timetables_button = gr.Button("Get timetables")
+            self.end = gr.DateTime(label="End of the period / Fin de la periode", include_time=False)
+        self.get_timetables_button = gr.Button("Get timetables / Obtenir les emplois du temps")
       gr.Markdown("## Timetables")
-      self.timetable = gr.CheckboxGroup(label="Timetable", info="If none are there the connection failed")
+      gr.Markdown("Emploi du temps")
+      self.timetable = gr.CheckboxGroup(label="Timetable / Emplois du temps", info="If none are there the connection failed / Si aucun n'est apparu il y a eu un probleme de connexion")
       self.get_timetables_button.click(fn=self.get_timetables, inputs=[self.start, self.end], outputs=[self.timetable])
       gr.Markdown("## Download")
+      gr.Markdown("Telechargement")
       dwnbtn = gr.DownloadButton()
       self.timetable.input(fn=self.makeical, inputs=[self.timetable], outputs=[dwnbtn])
     app.launch()
