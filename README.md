@@ -1,5 +1,5 @@
 # ULToICAL
-ULToICAL is an easy way to convert your Universite de Lorrainen Multi timetable to an ICAL format to store in Google Agenda, Apple Calendars etc...
+ULToICAL is an easy way to convert your Universite de Lorraine Multi timetable to an ICAL format to store in Google Agenda, Apple Calendars etc...
 ## Installation
 To use ULToICAL you will need `python>=3.10`
 
