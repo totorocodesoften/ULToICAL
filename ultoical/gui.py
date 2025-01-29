@@ -1,3 +1,4 @@
+import os
 import tempfile
 import uuid
 
@@ -27,7 +28,9 @@ class ULToICALInterface:
     files = []
     for timetable in self.handler.get_cached_timetable()["plannings"]:
       if timetable["label"] in timetables:
-        files.append(ICalHandler(timetable["events"]).make_ical())
+        ical = ICalHandler(timetable["events"]).make_ical()
+        files.append(ical)
+        self.tmps.append(ical)
     if len(files) == 1:
       return gr.DownloadButton(value=files[0])
     else:
@@ -36,9 +39,15 @@ class ULToICALInterface:
       for file in files:
         _zip.write(file)
       _zip.close()
+      self.tmps.append(_zip.filename)
       return gr.DownloadButton(value=_zip.filename)
 
+  def remove_tmps(self):
+    for tmp in self.tmps:
+        os.remove(tmp)
+
   def __init__(self):
+    self.tmps = []
     self.timetable = None
     self.handler = ULHandler()
     with gr.Blocks() as app:
@@ -75,4 +84,5 @@ class ULToICALInterface:
       gr.Markdown("Telechargement")
       dwnbtn = gr.DownloadButton()
       self.timetable.input(fn=self.makeical, inputs=[self.timetable], outputs=[dwnbtn])
+      dwnbtn.click(fn=self.remove_tmps)
     app.launch()

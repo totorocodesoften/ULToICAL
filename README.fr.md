@@ -1,6 +1,9 @@
 # ULToICAL
 [ [English](README.fr.md) | [Francais](README.fr.md) ]
 
+[ [Supporter mon travail](https://ko-fi.com/totorocodesoften) ]
+
+
 ULToICAL est un outil facile pour convertir votre EDT UL en format ICAL utilise par Google Agenda, le Calendrier Apple etc...
 ## Installation
 Pour utiliser ULToICAL vous aurais besoin de `python>=3.10`
