@@ -3,9 +3,9 @@ from importlib.metadata import entry_points
 from setuptools import setup, find_packages
 setup(
     name="ultoical",
-    version="1.1.0",
+    version="1.1.1",
     author="totorocodesoften",
-    author_email="todo", # TODO
+    author_email="totorocodesoften@github.com",
     description="A web app allowing you to create an ical file from your Universite de Lorraine's timetable",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
